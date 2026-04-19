@@ -9,38 +9,51 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-const prompt = "Suggest some gifts for someone who loves hiphop music";
+const content = "Suggest some gifts for someone who loves hiphop music";
 
-console.log("Sending prompt to OpenAI...", prompt);
+console.log("Sending prompt to OpenAI...", content);
 console.log("Generating gift suggestions...");
 
-try {
-  const response = await openai.chat.completions.create({
-    model: process.env.AI_MODEL,
-    messages: [
-      {
-        role: "user",
-        content: prompt,
-      },
-    ],
-  });
+const userMessage = {
+  role: "user",
+  content,
+};
 
-  console.log("AI response:");
-  console.log(response.choices[0].message.content);
+const response = await openai.chat.completions.create({
+  model: process.env.AI_MODEL,
+  messages: [userMessage],
+});
 
-} catch (error) {
-  if (error.status === 401 || error.status === 403) {
-    console.error(
-      "Authentication error: Check your AI_KEY and make sure it’s valid."
-    );
-  } else if (error.status >= 500) {
-    console.error(
-      "AI provider error: Something went wrong on the provider side. Try again shortly."
-    );
-  } else {
-    console.error(
-      "Unexpected error:",
-      error.message || error
-    );
-  }
-}
+console.log("AI response:");
+console.log(response.choices[0].message.content);
+
+// try {
+//   const response = await openai.chat.completions.create({
+//     model: process.env.AI_MODEL,
+//     messages: [
+//       {
+//         role: "user",
+//         content,
+//       },
+//     ],
+//   });
+
+//   console.log("AI response:");
+//   console.log(response.choices[0].message.content);
+
+// } catch (error) {
+//   if (error.status === 401 || error.status === 403) {
+//     console.error(
+//       "Authentication error: Check your AI_KEY and make sure it’s valid."
+//     );
+//   } else if (error.status >= 500) {
+//     console.error(
+//       "AI provider error: Something went wrong on the provider side. Try again shortly."
+//     );
+//   } else {
+//     console.error(
+//       "Unexpected error:",
+//       error.message || error
+//     );
+//   }
+// }
